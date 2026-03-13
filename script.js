@@ -23,7 +23,7 @@ const scenes = [
   {
     id: 'cozinha',
     label: 'Cozinha',
-    image: 'public/assets/milkway.jpg',
+    image: 'public/assets/inter.jpg',
     hotspots: [
       {
         theta: -Math.PI / 3,
@@ -36,7 +36,7 @@ const scenes = [
   {
     id: 'quarto',
     label: 'Quarto',
-    image: 'public/assets/vlw-mw-potw.jpg',
+    image: 'public/assets/inter1.jpg',
     hotspots: [
       {
         theta: Math.PI,
