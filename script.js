@@ -124,12 +124,43 @@ function sphericalToPosition(theta, phi, radius = 400) {
 
 const hotspotObjects = []; // guarda referências para raycasting e limpeza
 
+// ─── Gera textura de seta via Canvas (sem arquivo externo) ───────────────────
+function createArrowTexture() {
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+
+  // Círculo de fundo semi-transparente
+  ctx.beginPath();
+  ctx.arc(size / 2, size / 2, size / 2 - 4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.fill();
+
+  // Seta apontando para cima (↑)
+  ctx.fillStyle = '#222';
+  ctx.beginPath();
+  const cx = size / 2;
+  ctx.moveTo(cx, 20);        // ponta
+  ctx.lineTo(cx + 22, 58);   // ombro direito
+  ctx.lineTo(cx + 10, 58);   // chanfro direito
+  ctx.lineTo(cx + 10, 100);  // base direita
+  ctx.lineTo(cx - 10, 100);  // base esquerda
+  ctx.lineTo(cx - 10, 58);   // chanfro esquerdo
+  ctx.lineTo(cx - 22, 58);   // ombro esquerdo
+  ctx.closePath();
+  ctx.fill();
+
+  return new THREE.CanvasTexture(canvas);
+}
+
+const arrowTexture = createArrowTexture(); // reutiliza a mesma textura em todos os hotspots
+
 function createHotspots(hotspotsData) {
   hotspotsData.forEach((data) => {
-    // Sprite com textura de ícone
-    const map = textureLoader.load('public/assets/info-icon.png');
     const spriteMat = new THREE.SpriteMaterial({
-      map,
+      map: arrowTexture,
       sizeAttenuation: true,
       transparent: true,
     });
