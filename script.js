@@ -36,7 +36,7 @@ const scenes = [
   {
     id: 'quarto',
     label: 'Quarto',
-    image: 'public/assets/inter1.jpg',
+    image: 'public/assets/sala1.jpg',
     hotspots: [
       {
         theta: Math.PI,
