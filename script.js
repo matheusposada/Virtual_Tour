@@ -23,7 +23,7 @@ const scenes = [
   {
     id: 'cozinha',
     label: 'Cozinha',
-    image: 'public/assets/inter.jpg',
+    image: 'public/assets/turmapassada.png',
     hotspots: [
       {
         theta: -Math.PI / 3,
@@ -36,13 +36,27 @@ const scenes = [
   {
     id: 'quarto',
     label: 'Quarto',
-    image: 'public/assets/sala1.jpg',
+    image: 'public/assets/teste3.png',
+    hotspots: [
+      {
+        theta: Math.PI,
+        phi: Math.PI / 2,
+        targetScene: 'banheiro',
+        label: 'Ir para o banheiro',
+      },
+    ],
+  },
+
+  {
+    id: 'banheiro',
+    label: 'Banheiro',
+    image: 'public/assets/teste2.png',
     hotspots: [
       {
         theta: Math.PI,
         phi: Math.PI / 2,
         targetScene: 'sala',
-        label: 'Voltar para Sala',
+        label: 'Voltar para a sala',
       },
     ],
   },
