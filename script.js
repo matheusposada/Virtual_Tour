@@ -60,6 +60,20 @@ const scenes = [
       },
     ],
   },
+
+  {
+    id: 'garagem',
+    label: 'Garagem',
+    image: 'public/assets/arthur2.png',
+    hotspots: [
+      {
+        theta: Math.PI,
+        phi: Math.PI / 2,
+        targetScene: 'sala',
+        label: 'Voltar para a sala',
+      },
+    ],
+  },
 ];
 
 // ─── Setup básico ─────────────────────────────────────────────────────────────
