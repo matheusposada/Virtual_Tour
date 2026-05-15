@@ -36,7 +36,7 @@ const scenes = [
   {
     id: 'quarto',
     label: 'Quarto',
-    image: 'public/assets/teste3.png',
+    image: 'public/assets/teste2.png',
     hotspots: [
       {
         theta: Math.PI,
@@ -50,13 +50,13 @@ const scenes = [
   {
     id: 'banheiro',
     label: 'Banheiro',
-    image: 'public/assets/teste2.png',
+    image: 'public/assets/teste3.png',
     hotspots: [
       {
         theta: Math.PI,
         phi: Math.PI / 2,
-        targetScene: 'garagem',
-        label: 'Ir para a garagem',
+        targetScene: 'sala',
+        label: 'Voltar para a sala',
       },
     ],
   },
