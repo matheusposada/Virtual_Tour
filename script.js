@@ -55,8 +55,8 @@ const scenes = [
       {
         theta: Math.PI,
         phi: Math.PI / 2,
-        targetScene: 'sala',
-        label: 'Voltar para a sala',
+        targetScene: 'garagem',
+        label: 'Ir para a garagem',
       },
     ],
   },
