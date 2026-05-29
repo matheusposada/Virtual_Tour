@@ -1,353 +1,458 @@
 import * as THREE from 'three';
 
-// ─── Configuração das cenas ───────────────────────────────────────────────────
-// Cada cena tem nome, imagem e seus próprios hotspots.
-// Adicione quantas cenas quiser aqui — o resto do código não precisa mudar.
+// ─── Cenas ────────────────────────────────────────────────────────────────────
 const scenes = [
   {
-    id: 'sala',
-    label: 'Sala',
-    image: 'public/assets/test.jpg',
+    id: 'sala', label: 'Sala', image: 'public/assets/test.jpg',
+    floorPos: { x: 80, y: 70 },
     hotspots: [
+      { theta: Math.PI / 4,  phi: Math.PI / 2, targetScene: 'cozinha', label: 'Ir para Cozinha' },
       {
-        // Posição em coordenadas esféricas (theta = horizontal, phi = vertical)
-        // theta: 0 = frente, Math.PI = atrás, Math.PI/2 = direita
-        // phi:   0 = topo, Math.PI/2 = horizonte, Math.PI = base
-        theta: Math.PI / 4,
-        phi: Math.PI / 2,
-        targetScene: 'cozinha',
-        label: 'Ir para Cozinha',
+        theta: -Math.PI / 2, phi: Math.PI / 2.5, type: 'info',
+        label: 'Sala de Estar',
+        info: {
+          title: 'Sala de Estar',
+          image: 'public/assets/test.jpg',
+          text: 'Ampla sala com pé-direito de 3m, vigas aparentes e janelas piso-teto. Iluminação embutida Philips Hue e sofá em L com vista para o jardim. Área de 32m².',
+        },
       },
     ],
   },
   {
-    id: 'cozinha',
-    label: 'Cozinha',
-    image: 'public/assets/turmapassada.png',
+    id: 'cozinha', label: 'Cuzinho', image: 'public/assets/turmapassada.png',
+    floorPos: { x: 120, y: 70 },
     hotspots: [
+      { theta: -Math.PI / 3, phi: Math.PI / 2, targetScene: 'quarto', label: 'Ir para Quarto' },
+      { theta:  Math.PI / 2, phi: Math.PI / 2, targetScene: 'sala',   label: 'Voltar para Sala' },
       {
-        theta: -Math.PI / 3,
-        phi: Math.PI / 2,
-        targetScene: 'quarto',
-        label: 'Ir para Quarto',
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Cozinha Integrada',
+        info: {
+          title: 'Cozinha Integrada',
+          image: 'public/assets/turmapassada.png',
+          text: 'Cozinha americana integrada à sala. Balcão em granito preto, armários planejados e ilha central com cooktop de indução. Área de 18m².',
+        },
       },
     ],
   },
   {
-    id: 'quarto',
-    label: 'Quarto',
-    image: 'public/assets/teste2.png',
+    id: 'quarto', label: 'Quarto', image: 'public/assets/teste2.png',
+    floorPos: { x: 120, y: 110 },
     hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'banheiro', label: 'Ir para Banheiro' },
+      { theta: 0,            phi: Math.PI / 2, targetScene: 'cozinha',  label: 'Voltar para Cozinha' },
       {
-        theta: Math.PI,
-        phi: Math.PI / 2,
-        targetScene: 'banheiro',
-        label: 'Ir para o banheiro',
+        theta: Math.PI / 2, phi: Math.PI / 2.5, type: 'info',
+        label: 'Suíte Master',
+        info: {
+          title: 'Suíte Master',
+          image: 'public/assets/teste2.png',
+          text: 'Suíte master com closet planejado e banheiro privativo. Cama king size, ar-condicionado inverter e cortinas blackout. Área de 28m².',
+        },
       },
     ],
   },
-
   {
-    id: 'banheiro',
-    label: 'Banheiro',
-    image: 'public/assets/teste3.png',
+    id: 'banheiro', label: 'Banheiro', image: 'public/assets/teste3.png',
+    floorPos: { x: 80, y: 110 },
     hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala',    label: 'Voltar para a Sala' },
+      { theta: Math.PI / 2,  phi: Math.PI / 2, targetScene: 'garagem', label: 'Ir para Garagem' },
       {
-        theta: Math.PI,
-        phi: Math.PI / 2,
-        targetScene: 'sala',
-        label: 'Voltar para a sala',
+        theta: -Math.PI / 2, phi: Math.PI / 2.5, type: 'info',
+        label: 'Banheiro',
+        info: {
+          title: 'Banheiro',
+          image: 'public/assets/teste3.png',
+          text: 'Banheiro com ducha de chuva, banheira de imersão e revestimento em mármore Carrara. Aquecimento a gás com timer programável.',
+        },
       },
     ],
   },
-
   {
-    id: 'garagem',
-    label: 'Garagem',
-    image: 'public/assets/arthur2.png',
+    id: 'garagem', label: 'Garagem', image: 'public/assets/arthur2.png',
+    floorPos: { x: 40, y: 110 },
     hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
       {
-        theta: Math.PI,
-        phi: Math.PI / 2,
-        targetScene: 'sala',
-        label: 'Voltar para a sala',
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/arthur2.png',
+          text: 'Garagem para 2 veículos com portão automático, piso epóxi antiderrapante e tomada trifásica para carregamento de veículos elétricos.',
+        },
       },
     ],
   },
 ];
 
-// ─── Setup básico ─────────────────────────────────────────────────────────────
-const scene = new THREE.Scene();
+// Conexões para a planta baixa
+const floorConnections = [
+  ['sala','cozinha'],['sala','banheiro'],
+  ['cozinha','quarto'],['quarto','banheiro'],['banheiro','garagem'],
+];
 
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
+// ─── Estado ───────────────────────────────────────────────────────────────────
+let currentSceneId = null;
+let autoRotating   = false;
+const navHistory   = [];
+
+// ─── Three.js ────────────────────────────────────────────────────────────────
+const threeScene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 0);
 camera.rotation.order = 'YXZ';
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // evita lag em telas de alta densidade
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.6;
+renderer.toneMappingExposure = 0.7;
 document.body.appendChild(renderer.domElement);
 
-// ─── Esfera panorâmica ────────────────────────────────────────────────────────
 const geometry = new THREE.SphereGeometry(500, 60, 40);
 geometry.scale(-1, 1, 1);
 const material = new THREE.MeshBasicMaterial();
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
+threeScene.add(new THREE.Mesh(geometry, material));
 
-// ─── Carregador de texturas com loading screen ────────────────────────────────
-const textureLoader = new THREE.TextureLoader();
-const loadingEl = document.getElementById('loading');
+// ─── Textura / cache ──────────────────────────────────────────────────────────
+const loader  = new THREE.TextureLoader();
+const texCache = {};
 
-function loadScene(sceneId) {
-  const sceneData = scenes.find((s) => s.id === sceneId);
-  if (!sceneData) return;
-
-  // Mostra loading
-  loadingEl.classList.remove('hidden');
-
-  // Remove hotspots anteriores da cena Three.js
-  clearHotspots();
-
-  textureLoader.load(
-    sceneData.image,
-    (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
-      material.map = texture;
-      material.needsUpdate = true;
-
-      // Cria hotspots da nova cena
-      createHotspots(sceneData.hotspots);
-
-      // Atualiza minimap / breadcrumb
-      updateUI(sceneId);
-
-      loadingEl.classList.add('hidden');
-    },
-    undefined,
-    (err) => {
-      console.error('Erro ao carregar imagem:', err);
-      loadingEl.classList.add('hidden');
-    }
-  );
+function preload(url) {
+  if (texCache[url]) return;
+  loader.load(url, tex => { tex.encoding = THREE.sRGBEncoding; texCache[url] = tex; });
 }
 
-// ─── Hotspots ─────────────────────────────────────────────────────────────────
-// Converte coordenadas esféricas para posição 3D dentro da esfera
-function sphericalToPosition(theta, phi, radius = 400) {
+function getTexture(url, cb) {
+  if (texCache[url]) { cb(texCache[url]); return; }
+  loader.load(url, tex => { tex.encoding = THREE.sRGBEncoding; texCache[url] = tex; cb(tex); });
+}
+
+// ─── Crossfade ────────────────────────────────────────────────────────────────
+const fadeEl = document.getElementById('fade-overlay');
+function fadeIn(cb)  { fadeEl.classList.add('fading'); setTimeout(cb, 400); }
+function fadeOut()   { setTimeout(() => fadeEl.classList.remove('fading'), 50); }
+
+// ─── Hotspots ────────────────────────────────────────────────────────────────
+const hotspotObjects = [];
+
+function sphericalToVec3(theta, phi, r = 400) {
   return new THREE.Vector3(
-    radius * Math.sin(phi) * Math.sin(theta),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.cos(theta)
+    r * Math.sin(phi) * Math.sin(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.cos(theta)
   );
 }
 
-const hotspotObjects = []; // guarda referências para raycasting e limpeza
-
-// ─── Gera textura de seta via Canvas (sem arquivo externo) ───────────────────
-function createArrowTexture() {
-  const size = 128;
-  const canvas = document.createElement('canvas');
-  canvas.width = size;
-  canvas.height = size;
-  const ctx = canvas.getContext('2d');
-
-  // Círculo de fundo semi-transparente
+function makeArrowTex() {
+  const sz = 128, c = document.createElement('canvas');
+  c.width = c.height = sz;
+  const ctx = c.getContext('2d');
   ctx.beginPath();
-  ctx.arc(size / 2, size / 2, size / 2 - 4, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-  ctx.fill();
-
-  // Seta apontando para cima (↑)
-  ctx.fillStyle = '#222';
+  ctx.arc(sz/2, sz/2, sz/2-4, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(10,10,15,0.75)'; ctx.fill();
+  ctx.strokeStyle = '#58aa47'; ctx.lineWidth = 3; ctx.stroke();
+  ctx.fillStyle = '#58aa47';
+  const cx = sz/2;
   ctx.beginPath();
-  const cx = size / 2;
-  ctx.moveTo(cx, 20);        // ponta
-  ctx.lineTo(cx + 22, 58);   // ombro direito
-  ctx.lineTo(cx + 10, 58);   // chanfro direito
-  ctx.lineTo(cx + 10, 100);  // base direita
-  ctx.lineTo(cx - 10, 100);  // base esquerda
-  ctx.lineTo(cx - 10, 58);   // chanfro esquerdo
-  ctx.lineTo(cx - 22, 58);   // ombro esquerdo
-  ctx.closePath();
-  ctx.fill();
-
-  return new THREE.CanvasTexture(canvas);
+  ctx.moveTo(cx,22); ctx.lineTo(cx+20,58); ctx.lineTo(cx+9,58);
+  ctx.lineTo(cx+9,98); ctx.lineTo(cx-9,98); ctx.lineTo(cx-9,58);
+  ctx.lineTo(cx-20,58); ctx.closePath(); ctx.fill();
+  return new THREE.CanvasTexture(c);
 }
 
-const arrowTexture = createArrowTexture(); // reutiliza a mesma textura em todos os hotspots
+const arrowTex = makeArrowTex();
 
-function createHotspots(hotspotsData) {
-  hotspotsData.forEach((data) => {
-    const spriteMat = new THREE.SpriteMaterial({
-      map: arrowTexture,
-      sizeAttenuation: true,
-      transparent: true,
-    });
-    const sprite = new THREE.Sprite(spriteMat);
-    sprite.position.copy(sphericalToPosition(data.theta, data.phi));
+function makeInfoTex() {
+  const sz = 128, c = document.createElement('canvas');
+  c.width = c.height = sz;
+  const ctx = c.getContext('2d');
+  // fundo + borda branca
+  ctx.beginPath();
+  ctx.arc(sz/2, sz/2, sz/2-4, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(15, 11, 10, 0.82)'; ctx.fill();
+  ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+  // letra "i"
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 68px serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('i', sz/2, sz/2 + 4);
+  return new THREE.CanvasTexture(c);
+}
+
+const infoTex = makeInfoTex();
+
+function createHotspots(data) {
+  data.forEach(h => {
+    const tex = h.type === 'info' ? infoTex : arrowTex;
+    const mat    = new THREE.SpriteMaterial({ map: tex, sizeAttenuation: true, transparent: true });
+    const sprite = new THREE.Sprite(mat);
+    sprite.position.copy(sphericalToVec3(h.theta, h.phi));
     sprite.scale.set(40, 40, 1);
-    sprite.userData = { targetScene: data.targetScene, label: data.label };
-    scene.add(sprite);
+    sprite.userData = { ...h };
+    threeScene.add(sprite);
     hotspotObjects.push(sprite);
   });
 }
 
 function clearHotspots() {
-  hotspotObjects.forEach((obj) => scene.remove(obj));
+  hotspotObjects.forEach(o => threeScene.remove(o));
   hotspotObjects.length = 0;
 }
 
-// ─── UI: loading + breadcrumb ─────────────────────────────────────────────────
-function updateUI(sceneId) {
-  const sceneData = scenes.find((s) => s.id === sceneId);
-  const breadcrumb = document.getElementById('breadcrumb');
-  if (breadcrumb && sceneData) breadcrumb.textContent = sceneData.label;
+// ─── Planta baixa ────────────────────────────────────────────────────────────
+const floorCanvas = document.getElementById('floormap');
+const fCtx = floorCanvas.getContext('2d');
 
-  // Atualiza botões do minimapa
-  document.querySelectorAll('.map-btn').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.scene === sceneId);
+function drawFloorplan(activeId) {
+  const W = floorCanvas.width, H = floorCanvas.height;
+  fCtx.clearRect(0, 0, W, H);
+
+  fCtx.strokeStyle = 'rgba(94, 73, 73, 0.48)'; fCtx.lineWidth = 2;
+  floorConnections.forEach(([a, b]) => {
+    const sa = scenes.find(s => s.id === a), sb = scenes.find(s => s.id === b);
+    if (!sa || !sb) return;
+    fCtx.beginPath();
+    fCtx.moveTo(sa.floorPos.x, sa.floorPos.y);
+    fCtx.lineTo(sb.floorPos.x, sb.floorPos.y);
+    fCtx.stroke();
+  });
+
+  scenes.forEach(s => {
+    const active = s.id === activeId;
+    fCtx.beginPath();
+    fCtx.arc(s.floorPos.x, s.floorPos.y, active ? 9 : 6, 0, Math.PI*2);
+    fCtx.fillStyle = active ? '#58aa47' : 'rgba(114, 106, 106, 0.35)';
+    fCtx.fill();
+    fCtx.font = `${active ? 'bold ' : ''}9px "DM Mono", monospace`;
+    fCtx.fillStyle = active ? '#58aa47' : 'rgba(235, 228, 228, 0.45)';
+    fCtx.textAlign = 'center';
+    fCtx.fillText(s.label, s.floorPos.x, s.floorPos.y - 13);
+  });
+
+  const pos = scenes.find(s => s.id === activeId)?.floorPos;
+  if (pos) {
+    fCtx.save();
+    fCtx.translate(pos.x, pos.y);
+    fCtx.rotate(-camera.rotation.y);
+    fCtx.beginPath();
+    fCtx.moveTo(0, 0); fCtx.arc(0, 0, 18, -0.6, 0.6); fCtx.closePath();
+    fCtx.fillStyle = 'rgba(119, 161, 91, 0.43)'; fCtx.fill();
+    fCtx.restore();
+  }
+}
+
+// ─── Bússola ──────────────────────────────────────────────────────────────────
+const compassNeedle = document.getElementById('compass-needle');
+function updateCompass() {
+  compassNeedle.style.transform = `rotate(${THREE.MathUtils.radToDeg(-camera.rotation.y)}deg)`;
+}
+
+// ─── UI ───────────────────────────────────────────────────────────────────────
+function updateUI(sceneId) {
+  const data = scenes.find(s => s.id === sceneId);
+  document.getElementById('breadcrumb').textContent = data?.label ?? '—';
+  document.querySelectorAll('.map-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.scene === sceneId)
+  );
+  const backBtn = document.getElementById('back-btn');
+  navHistory.length > 0 ? backBtn.classList.add('visible') : backBtn.classList.remove('visible');
+
+  // pré-carrega vizinhos
+  data?.hotspots?.forEach(h => {
+    const nb = scenes.find(s => s.id === h.targetScene);
+    if (nb) preload(nb.image);
+  });
+
+  // salva estado na URL
+  const url = new URL(location.href);
+  url.searchParams.set('scene', sceneId);
+  url.searchParams.set('yaw', camera.rotation.y.toFixed(3));
+  history.replaceState({}, '', url);
+}
+
+// ─── Carregar cena ────────────────────────────────────────────────────────────
+const loadingEl = document.getElementById('loading');
+
+function loadScene(sceneId, push = true) {
+  if (sceneId === currentSceneId) return;
+  const data = scenes.find(s => s.id === sceneId);
+  if (!data) return;
+
+  if (push && currentSceneId) navHistory.push(currentSceneId);
+
+  fadeIn(() => {
+    loadingEl.classList.remove('hidden');
+    clearHotspots();
+    getTexture(data.image, tex => {
+      material.map = tex; material.needsUpdate = true;
+      createHotspots(data.hotspots);
+      currentSceneId = sceneId;
+      updateUI(sceneId);
+      loadingEl.classList.add('hidden');
+      fadeOut();
+    });
   });
 }
 
 // ─── Raycaster ────────────────────────────────────────────────────────────────
 const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+const mouse2d   = new THREE.Vector2();
 
-function checkHotspotClick(clientX, clientY) {
-  mouse.x = (clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(hotspotObjects);
-  if (intersects.length > 0) {
-    const target = intersects[0].object.userData.targetScene;
-    if (target) loadScene(target);
-  }
+function getHits(cx, cy) {
+  mouse2d.x = (cx / innerWidth)  *  2 - 1;
+  mouse2d.y = (cy / innerHeight) * -2 + 1;
+  raycaster.setFromCamera(mouse2d, camera);
+  return raycaster.intersectObjects(hotspotObjects);
 }
 
-// ─── Controles: mouse ─────────────────────────────────────────────────────────
-let isDragging = false;
-let previousMouse = { x: 0, y: 0 };
-let mouseDownPos = { x: 0, y: 0 };
-const DRAG_THRESHOLD = 5;
+function onTap(cx, cy) {
+  const hits = getHits(cx, cy);
+  if (!hits.length) return;
+  const ud = hits[0].object.userData;
+  if (ud.type === 'info')      openPopup(ud.info);
+  else if (ud.targetScene)     loadScene(ud.targetScene);
+}
 
-window.addEventListener('mousedown', (e) => {
+// ─── Mouse ────────────────────────────────────────────────────────────────────
+let isDragging = false, prevM = {x:0,y:0}, downM = {x:0,y:0};
+
+renderer.domElement.addEventListener('mousedown', e => {
   isDragging = true;
-  previousMouse = { x: e.clientX, y: e.clientY };
-  mouseDownPos = { x: e.clientX, y: e.clientY };
+  prevM = downM = { x: e.clientX, y: e.clientY };
 });
-
-window.addEventListener('mouseup', (e) => {
-  isDragging = false;
-  const dx = e.clientX - mouseDownPos.x;
-  const dy = e.clientY - mouseDownPos.y;
-  if (Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) {
-    checkHotspotClick(e.clientX, e.clientY);
+window.addEventListener('mouseup', e => {
+  if (!isDragging) return; isDragging = false;
+  if (Math.hypot(e.clientX - downM.x, e.clientY - downM.y) < 5) onTap(e.clientX, e.clientY);
+});
+window.addEventListener('mousemove', e => {
+  if (!isDragging) {
+    document.body.classList.toggle('cursor-pointer', getHits(e.clientX, e.clientY).length > 0);
+    return;
   }
+  camera.rotation.y -= (e.clientX - prevM.x) * 0.005;
+  camera.rotation.x  = Math.max(-Math.PI/2, Math.min(Math.PI/2,
+    camera.rotation.x - (e.clientY - prevM.y) * 0.005));
+  prevM = { x: e.clientX, y: e.clientY };
 });
 
-window.addEventListener('mousemove', (e) => {
-  if (!isDragging) return;
-  const dx = e.clientX - previousMouse.x;
-  const dy = e.clientY - previousMouse.y;
-  let yaw = camera.rotation.y - dx * 0.005;
-  let pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x - dy * 0.005));
-  camera.rotation.set(pitch, yaw, 0);
-  previousMouse = { x: e.clientX, y: e.clientY };
-});
-
-// ─── Controles: touch (mobile) ────────────────────────────────────────────────
-let previousTouch = null;
-let touchDownPos = null;
-
-window.addEventListener('touchstart', (e) => {
-  previousTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-  touchDownPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-});
-
-window.addEventListener('touchend', (e) => {
-  if (!touchDownPos) return;
+// ─── Touch ────────────────────────────────────────────────────────────────────
+let prevT = null, downT = null;
+window.addEventListener('touchstart',  e => { prevT = downT = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }, { passive: true });
+window.addEventListener('touchend',    e => {
+  if (!downT) return;
   const t = e.changedTouches[0];
-  const dx = t.clientX - touchDownPos.x;
-  const dy = t.clientY - touchDownPos.y;
-  if (Math.sqrt(dx * dx + dy * dy) < DRAG_THRESHOLD) {
-    checkHotspotClick(t.clientX, t.clientY);
-  }
-  previousTouch = null;
-  touchDownPos = null;
+  if (Math.hypot(t.clientX - downT.x, t.clientY - downT.y) < 5) onTap(t.clientX, t.clientY);
+  prevT = downT = null;
 });
-
-window.addEventListener('touchmove', (e) => {
+window.addEventListener('touchmove',  e => {
   e.preventDefault();
-  if (!previousTouch) return;
-  const touch = e.touches[0];
-  const dx = touch.clientX - previousTouch.x;
-  const dy = touch.clientY - previousTouch.y;
-  let yaw = camera.rotation.y - dx * 0.005;
-  let pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, camera.rotation.x - dy * 0.005));
-  camera.rotation.set(pitch, yaw, 0);
-  previousTouch = { x: touch.clientX, y: touch.clientY };
+  if (!prevT) return;
+  const t = e.touches[0];
+  camera.rotation.y -= (t.clientX - prevT.x) * 0.005;
+  camera.rotation.x  = Math.max(-Math.PI/2, Math.min(Math.PI/2,
+    camera.rotation.x - (t.clientY - prevT.y) * 0.005));
+  prevT = { x: t.clientX, y: t.clientY };
 }, { passive: false });
 
-// ─── Zoom com scroll ──────────────────────────────────────────────────────────
-window.addEventListener('wheel', (e) => {
+// ─── Scroll zoom ─────────────────────────────────────────────────────────────
+window.addEventListener('wheel', e => {
   camera.fov = Math.max(30, Math.min(100, camera.fov + e.deltaY * 0.05));
   camera.updateProjectionMatrix();
 });
 
-// ─── Redimensionamento ────────────────────────────────────────────────────────
+// ─── Resize ───────────────────────────────────────────────────────────────────
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(innerWidth, innerHeight);
 });
 
-// ─── Cursor: muda ao passar sobre hotspot ─────────────────────────────────────
-window.addEventListener('mousemove', (e) => {
-  mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-  raycaster.setFromCamera(mouse, camera);
-  const hits = raycaster.intersectObjects(hotspotObjects);
-  document.body.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
-});
-
-// ─── Loop de animação ─────────────────────────────────────────────────────────
-function animate() {
-  requestAnimationFrame(animate);
-
-  // Pulsa os hotspots suavemente para chamar atenção
-  const t = Date.now() * 0.002;
-  hotspotObjects.forEach((obj, i) => {
-    const scale = 40 + Math.sin(t + i) * 5;
-    obj.scale.set(scale, scale, 1);
-  });
-
-  renderer.render(scene, camera);
+// ─── Pop-up de informação ─────────────────────────────────────────────────────
+function openPopup(info) {
+  document.getElementById('popup-title').textContent = info.title;
+  document.getElementById('popup-text').textContent  = info.text;
+  const img = document.getElementById('popup-img');
+  img.src = info.image ?? '';
+  img.style.display = info.image ? 'block' : 'none';
+  document.getElementById('info-popup').classList.add('open');
 }
 
-// ─── Minimap: gera botões automaticamente com base em `scenes` ───────────────
+document.getElementById('popup-close').addEventListener('click', () => {
+  document.getElementById('info-popup').classList.remove('open');
+});
+document.getElementById('info-popup').addEventListener('click', e => {
+  if (e.target === e.currentTarget)
+    e.currentTarget.classList.remove('open');
+});
+
+// ─── Toolbar ─────────────────────────────────────────────────────────────────
+document.getElementById('btn-fullscreen').addEventListener('click', () => {
+  document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+
+const btnAuto = document.getElementById('btn-autorotate');
+btnAuto.addEventListener('click', () => {
+  autoRotating = !autoRotating;
+  btnAuto.classList.toggle('active', autoRotating);
+});
+
+document.getElementById('btn-share').addEventListener('click', () => {
+  const url = new URL(location.href);
+  url.searchParams.set('scene', currentSceneId);
+  url.searchParams.set('yaw', camera.rotation.y.toFixed(3));
+  navigator.clipboard.writeText(url.toString()).then(() => {
+    const tip = document.querySelector('#btn-share .tooltip');
+    tip.textContent = '✓ Link copiado!';
+    setTimeout(() => { tip.textContent = 'Copiar link desta cena'; }, 2000);
+  });
+});
+
+// ─── Voltar ───────────────────────────────────────────────────────────────────
+document.getElementById('back-btn').addEventListener('click', () => {
+  if (!navHistory.length) return;
+  loadScene(navHistory.pop(), false);
+});
+
+// ─── Minimap ─────────────────────────────────────────────────────────────────
 function buildMinimap() {
-  const minimap = document.getElementById('minimap');
-  if (!minimap) return;
-  scenes.forEach((s) => {
+  const nav = document.getElementById('minimap');
+  scenes.forEach(s => {
     const btn = document.createElement('button');
     btn.className = 'map-btn';
     btn.dataset.scene = s.id;
     btn.textContent = s.label;
     btn.addEventListener('click', () => loadScene(s.id));
-    minimap.appendChild(btn);
+    nav.appendChild(btn);
   });
 }
 
-// ─── Inicialização ────────────────────────────────────────────────────────────
+// ─── Restaurar pela URL ───────────────────────────────────────────────────────
+function getInitialScene() {
+  const p = new URLSearchParams(location.search);
+  const id  = p.get('scene'), yaw = parseFloat(p.get('yaw'));
+  if (id && scenes.find(s => s.id === id)) {
+    if (!isNaN(yaw)) camera.rotation.y = yaw;
+    return id;
+  }
+  return scenes[0].id;
+}
+
+// ─── Loop ────────────────────────────────────────────────────────────────────
+function animate() {
+  requestAnimationFrame(animate);
+  const t = Date.now() * 0.002;
+  hotspotObjects.forEach((o, i) => { const s = 40 + Math.sin(t + i) * 5; o.scale.set(s, s, 1); });
+  if (autoRotating && !isDragging) camera.rotation.y += 0.0015;
+  updateCompass();
+  drawFloorplan(currentSceneId);
+  renderer.render(threeScene, camera);
+}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
 buildMinimap();
-loadScene(scenes[0].id);
+loadScene(getInitialScene(), false);
 animate();

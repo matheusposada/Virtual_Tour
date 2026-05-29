@@ -4,155 +4,59 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tour Virtual</title>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      overflow: hidden;
-      background: #000;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      cursor: grab;
-    }
-    body:active { cursor: grabbing; }
-
-    canvas { display: block; }
-
-    /* ── Loading overlay ── */
-    #loading {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      color: #fff;
-      font-size: 14px;
-      letter-spacing: 0.05em;
-      z-index: 100;
-      transition: opacity 0.3s;
-    }
-    #loading.hidden { opacity: 0; pointer-events: none; }
-
-    .spinner {
-      width: 36px;
-      height: 36px;
-      border: 3px solid rgba(255,255,255,0.2);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Breadcrumb (nome da cena atual) ── */
-    #breadcrumb {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      padding: 6px 18px;
-      border-radius: 20px;
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      backdrop-filter: blur(8px);
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    /* ── Minimap / navegação por cenas ── */
-    #minimap {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 10px;
-      z-index: 10;
-    }
-
-    .map-btn {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #fff;
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: background 0.2s, border-color 0.2s;
-      letter-spacing: 0.05em;
-    }
-    .map-btn:hover { background: rgba(255,255,255,0.25); }
-    .map-btn.active {
-      background: rgba(255,255,255,0.9);
-      color: #000;
-      border-color: transparent;
-    }
-  );
-}
-
-// ─── Hotspots ─────────────────────────────────────────────────────────────────
-
-    /* ── Dica de interação (some depois de 3s) ── */
-    #hint {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.5);
-      font-size: 12px;
-      letter-spacing: 0.05em;
-      pointer-events: none;
-      animation: fadeOut 1s ease 3s forwards;
-    }
-    @keyframes fadeOut { to { opacity: 0; } }
-  </style>
+  <link rel="stylesheet" href="./Style.css">
 </head>
 <body>
 
-  <!-- Loading -->
   <div id="loading">
-    <div class="spinner"></div>
-    <span>Carregando cena...</span>
+    <div class="loading-ring"></div>
+    <span class="loading-label">Carregando cena…</span>
   </div>
 
-  <!-- Nome da cena atual -->
+  <div id="fade-overlay"></div>
+
   <div id="breadcrumb">—</div>
 
-  <!-- Dica -->
-  <div id="hint">🖱 Clique e arraste para olhar ao redor</div>
+  <div id="compass">
+    <div id="compass-needle"></div>
+  </div>
 
-  <!-- Minimap: botões gerados pelo script -->
+  <div id="toolbar">
+    <button class="tool-btn" id="btn-fullscreen">
+      ⛶<span class="tooltip">Tela cheia</span>
+    </button>
+    <button class="tool-btn" id="btn-autorotate">
+      ↻<span class="tooltip">Rotação automática</span>
+    </button>
+    <button class="tool-btn" id="btn-share">
+      ⎋<span class="tooltip">Copiar link desta cena</span>
+    </button>
+  </div>
+
+  <div id="floorplan">
+    <canvas id="floormap" width="160" height="140"></canvas>
+    <div id="floorplan-label">Planta baixa</div>
+  </div>
+
+  <button id="back-btn">← Voltar</button>
+
   <nav id="minimap"></nav>
 
+  <div id="hint">🖱 Arraste para olhar · Scroll para zoom · Clique nas setas para navegar</div>
+
+  <!-- Pop-up de informação -->
+  <div id="info-popup">
+    <div id="popup-card">
+      <button id="popup-close">✕</button>
+      <img id="popup-img" src="" alt="">
+      <div id="popup-title">—</div>
+      <div id="popup-text">—</div>
+    </div>
+  </div>
+
   <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
-      }
-    }
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
   </script>
-
-  <script type="module">
-    // Gera os botões do minimap com base no array de cenas do script.js
-    // Para isso, o script.js precisa exportar `scenes`
-    // (veja a nota no script.js)
-  </script>
-
   <script type="module" src="./script.js"></script>
-
-  <script type="module">
-    // Aguarda o script carregar e gera os botões dinamicamente
-    // Se preferir, pode adicionar os botões manualmente no HTML também
-    window.addEventListener('load', () => {
-      const minimap = document.getElementById('minimap');
-      // Os botões são gerados pelo script.js via buildMinimap()
-    });
-  </script>
-
 </body>
 </html>
