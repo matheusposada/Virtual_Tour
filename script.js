@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // ─── Cenas ────────────────────────────────────────────────────────────────────
 const scenes = [
   {
-    id: 'sala', label: 'Sala', image: 'public/assets/test.jpg',
+    id: 'sala', label: 'Modelo', image: 'public/assets/test.jpg',
     floorPos: { x: 80, y: 70 },
     hotspots: [
       { theta: Math.PI / 4,  phi: Math.PI / 2, targetScene: 'cozinha', label: 'Ir para Cozinha' },
@@ -19,7 +19,7 @@ const scenes = [
     ],
   },
   {
-    id: 'cozinha', label: 'Cuzinho', image: 'public/assets/turmapassada.png',
+    id: 'cozinha', label: 'Sprint 1', image: 'public/assets/turmapassada.png',
     floorPos: { x: 120, y: 70 },
     hotspots: [
       { theta: -Math.PI / 3, phi: Math.PI / 2, targetScene: 'quarto', label: 'Ir para Quarto' },
@@ -36,7 +36,7 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto', label: 'Quarto', image: 'public/assets/teste2.png',
+    id: 'quarto', label: 'Sprint 2', image: 'public/assets/teste2.png',
     floorPos: { x: 120, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'banheiro', label: 'Ir para Banheiro' },
@@ -53,7 +53,7 @@ const scenes = [
     ],
   },
   {
-    id: 'banheiro', label: 'Banheiro', image: 'public/assets/teste3.png',
+    id: 'banheiro', label: 'Sprint 3', image: 'public/assets/teste3.png',
     floorPos: { x: 80, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala',    label: 'Voltar para a Sala' },
@@ -70,7 +70,7 @@ const scenes = [
     ],
   },
   {
-    id: 'garagem', label: 'Garagem', image: 'public/assets/arthur2.png',
+    id: 'garagem', label: 'Sprint 3/4', image: 'public/assets/salaifscP.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -79,8 +79,56 @@ const scenes = [
         label: 'Garagem',
         info: {
           title: 'Garagem',
-          image: 'public/assets/arthur2.png',
-          text: 'Garagem para 2 veículos com portão automático, piso epóxi antiderrapante e tomada trifásica para carregamento de veículos elétricos.',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do Vitor.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'quarto2', label: 'Sprint 3/4', image: 'public/assets/salaCifsc.png',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'quarto3', label: 'Sprint 3/4', image: 'public/assets/sala1museu.png',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'quarto4', label: 'Sprint 3/4', image: 'public/assets/sala2museu.png',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
         },
       },
     ],
