@@ -19,23 +19,6 @@ const scenes = [
     ],
   },
   {
-    id: 'cozinha', label: 'Sprint 1', image: 'public/assets/turmapassada.png',
-    floorPos: { x: 120, y: 70 },
-    hotspots: [
-      { theta: -Math.PI / 3, phi: Math.PI / 2, targetScene: 'quarto', label: 'Ir para Quarto' },
-      { theta:  Math.PI / 2, phi: Math.PI / 2, targetScene: 'sala',   label: 'Voltar para Sala' },
-      {
-        theta: 0, phi: Math.PI / 2.5, type: 'info',
-        label: 'Cozinha Integrada',
-        info: {
-          title: 'Cozinha Integrada',
-          image: 'public/assets/turmapassada.png',
-          text: 'Cozinha americana integrada à sala. Balcão em granito preto, armários planejados e ilha central com cooktop de indução. Área de 18m².',
-        },
-      },
-    ],
-  },
-  {
     id: 'quarto', label: 'Sprint 2', image: 'public/assets/teste2.png',
     floorPos: { x: 120, y: 110 },
     hotspots: [
