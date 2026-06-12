@@ -101,7 +101,7 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto4', label: 'Sprint 3/4', image: 'public/assets/sala2museu.png',
+    id: 'quarto4', label: 'Sprint 3/4', image: 'public/assets/salaprofissoes.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
