@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 // ─── Cenas ────────────────────────────────────────────────────────────────────
 const scenes = [
-  {
+  /*{
     id: 'sala', label: 'Modelo', image: 'public/assets/test.jpg',
     floorPos: { x: 80, y: 70 },
     hotspots: [
@@ -18,7 +18,7 @@ const scenes = [
       },
     ],
   },
-  {
+  /*{
     id: 'quarto', label: 'Sprint 2', image: 'public/assets/teste2.png',
     floorPos: { x: 120, y: 110 },
     hotspots: [
@@ -83,9 +83,9 @@ const scenes = [
         },
       },
     ],
-  },
+  },*/
   {
-    id: 'quarto3', label: 'Sprint 3/4', image: 'public/assets/sala1museu.png',
+    id: 'quarto3', label: 'Sala 1', image: 'public/assets/sala1museu.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -101,7 +101,7 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto4', label: 'Sprint 3/4', image: 'public/assets/salaprofissoes.jpg',
+    id: 'quarto4', label: 'Sala 2', image: 'public/assets/sala2museu.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
