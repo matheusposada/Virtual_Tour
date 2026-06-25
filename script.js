@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // ─── Cenas ────────────────────────────────────────────────────────────────────
 const scenes = [
   {
-    id: 'quarto3', label: 'Sala 1', image: 'public/assets/sala1museu.png',
+    id: 'quarto3', label: 'Política administrativa', image: 'public/assets/sala1museu.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -19,7 +19,39 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto4', label: 'Sala 2', image: 'public/assets/sala2museu.jpg',
+    id: 'quarto4', label: 'Ofícios do passado', image: 'public/assets/sala2museu.jpg',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'quarto5', label: 'Igreja matriz', image: 'public/assets/religiao.jpg',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'quarto6', label: 'Souvenirs', image: 'public/assets/souvenir.jpg',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
