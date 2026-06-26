@@ -10,6 +10,7 @@ const scenes = [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
       { theta: Math.PI / 1.72,  phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
     ],
+   northOffset: -37.815 * (Math.PI / 180)
   },
   {
     id: 'sala2', label: 'Ofícios do passado', shortLabel: 'Ofícios',
@@ -19,6 +20,7 @@ const scenes = [
       { theta: Math.PI*1.8,      phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
       { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
     ],
+    northOffset: 2.5,
   },
   {
     id: 'sala7', label: 'Ofícios do passado', shortLabel: 'Ofícios',
@@ -29,6 +31,7 @@ const scenes = [
       { theta: Math.PI/6*3, phi: Math.PI / 2, targetScene: 'sala6', label: 'Ir para Engenho' },
       { theta: Math.PI/2*3, phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
     ],
+    northOffset: 0
   },
   {
     id: 'sala8', label: 'Militar', shortLabel: 'Militar',
@@ -38,6 +41,7 @@ const scenes = [
       { theta: Math.PI*1.48,      phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
       { theta: Math.PI/8*9, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
     ],
+    northOffset: 0
   },
   {
     id: 'sala3', label: 'Indígena', shortLabel: 'Indígena',
@@ -47,6 +51,7 @@ const scenes = [
       { theta: Math.PI/1.3, phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
       { theta: Math.PI*0.98,       phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
     ],
+    northOffset: 0
   },
   {
     id: 'sala4', label: 'Igreja matriz', shortLabel: 'Igreja',
@@ -55,6 +60,7 @@ const scenes = [
     hotspots: [
       { theta: Math.PI, phi: Math.PI / 2.3, targetScene: 'sala5', label: 'Ir para Souvenirs' },
     ],
+    northOffset: 0
   },
   {
     id: 'sala5', label: 'Souvenirs', shortLabel: 'Souvenirs',
@@ -65,6 +71,7 @@ const scenes = [
       { theta: Math.PI/9, phi: Math.PI / 1.7, targetScene: 'sala3', label: 'Ir para Indígena' },
       { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala8', label: 'Ir para Militar' },
     ],
+    northOffset: 0
   },
   {
     id: 'sala6', label: 'Engenho', shortLabel: 'Engenho',
@@ -73,6 +80,7 @@ const scenes = [
     hotspots: [
       { theta: Math.PI/7*4-0.06, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
     ],
+    northOffset: 0
   },
 ];
 
@@ -93,6 +101,14 @@ const floorConnections = [
 let currentSceneId = null;
 let autoRotating   = false;
 const navHistory   = [];
+
+
+window.addEventListener('mouseup', e => {
+  if (!isDragging) return; isDragging = false;
+  if (Math.hypot(e.clientX - downM.x, e.clientY - downM.y) < 5) onTap(e.clientX, e.clientY);
+  
+  console.log('yaw ao soltar:', camera.rotation.y); // ← adiciona aqui
+});
 
 // ─── Three.js ────────────────────────────────────────────────────────────────
 const threeScene = new THREE.Scene();
@@ -260,7 +276,7 @@ function drawFloorplan(activeId) {
   if (pos) {
     fCtx.save();
     fCtx.translate(pos.x, pos.y);
-    fCtx.rotate(-camera.rotation.y);
+    fCtx.rotate(-(camera.rotation.y + (scenes.find(s => s.id === activeId)?.northOffset ?? 0))); 
     fCtx.beginPath();
     fCtx.moveTo(0, 0); fCtx.arc(0, 0, 18, -0.6, 0.6); fCtx.closePath();
     fCtx.fillStyle = 'rgba(119, 161, 91, 0.43)'; fCtx.fill();
@@ -271,7 +287,11 @@ function drawFloorplan(activeId) {
 // ─── Bússola ──────────────────────────────────────────────────────────────────
 const compassNeedle = document.getElementById('compass-needle');
 function updateCompass() {
-  compassNeedle.style.transform = `rotate(${THREE.MathUtils.radToDeg(-camera.rotation.y)}deg)`;
+  const scene = scenes.find(s => s.id === currentSceneId);
+  const offset = scene?.northOffset ?? 0;
+  console.log(scene?.id, 'offset:', offset);
+  const deg = THREE.MathUtils.radToDeg(-(camera.rotation.y + offset));
+  compassNeedle.style.transform = `rotate(${deg}deg)`;
 }
 
 // ─── UI ───────────────────────────────────────────────────────────────────────
