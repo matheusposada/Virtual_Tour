@@ -5,7 +5,7 @@ const scenes = [
   {
     id: 'sala1', label: 'Política administrativa', shortLabel: 'Pol. Admin.',
     image: 'public/assets/sala1museu.png',
-    floorPos: { x: 75, y: 178 },
+    floorPos: { x: 65, y: 178 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
       { theta: Math.PI / 1.72,  phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
@@ -14,16 +14,35 @@ const scenes = [
   {
     id: 'sala2', label: 'Ofícios do passado', shortLabel: 'Ofícios',
     image: 'public/assets/sala2museu.jpg',
-    floorPos: { x: 90, y: 115 },
+    floorPos: { x: 65, y: 130 },
     hotspots: [
       { theta: Math.PI*1.8,      phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
-      { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala6', label: 'Ir para Engenho' },
+      { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
+    ],
+  },
+  {
+    id: 'sala7', label: 'Ofícios do passado', shortLabel: 'Ofícios',
+    image: 'public/assets/oficios2.jpg',
+    floorPos: { x: 65, y: 85 },
+    hotspots: [
+      { theta: Math.PI*1.8,      phi: Math.PI / 2, targetScene: 'sala8', label: 'Ir para Militar' },
+      { theta: Math.PI/6*3, phi: Math.PI / 2, targetScene: 'sala6', label: 'Ir para Engenho' },
+      { theta: Math.PI/2*3, phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
+    ],
+  },
+  {
+    id: 'sala8', label: 'Militar', shortLabel: 'Militar',
+    image: 'public/assets/militar.jpg',
+    floorPos: { x: 130, y: 85 },
+    hotspots: [
+      { theta: Math.PI*1.48,      phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
+      { theta: Math.PI/8*9, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
     ],
   },
   {
     id: 'sala3', label: 'Indígena', shortLabel: 'Indígena',
     image: 'public/assets/indigena.jpg',
-    floorPos: { x: 110, y: 115 },
+    floorPos: { x: 125, y: 178 },
     hotspots: [
       { theta: Math.PI/1.3, phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
       { theta: Math.PI*0.98,       phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
@@ -32,7 +51,7 @@ const scenes = [
   {
     id: 'sala4', label: 'Igreja matriz', shortLabel: 'Igreja',
     image: 'public/assets/religiao.jpg',
-    floorPos: { x: 160, y: 115 },
+    floorPos: { x: 190, y: 178 },
     hotspots: [
       { theta: Math.PI, phi: Math.PI / 2.3, targetScene: 'sala5', label: 'Ir para Souvenirs' },
     ],
@@ -40,11 +59,11 @@ const scenes = [
   {
     id: 'sala5', label: 'Souvenirs', shortLabel: 'Souvenirs',
     image: 'public/assets/souvenir.jpg',
-    floorPos: { x: 110, y: 60 },
+    floorPos: { x: 130, y: 130 },
     hotspots: [
       { theta: Math.PI/5.5,       phi: Math.PI / 2.3, targetScene: 'sala4', label: 'Ir para Igreja matriz' },
       { theta: Math.PI/9, phi: Math.PI / 1.7, targetScene: 'sala3', label: 'Ir para Indígena' },
-      { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala6', label: 'Ir para Engenho' },
+      { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala8', label: 'Ir para Militar' },
     ],
   },
   {
@@ -52,20 +71,22 @@ const scenes = [
     image: 'public/assets/engenho.jpg',
     floorPos: { x: 110, y: 22 },
     hotspots: [
-      { theta: Math.PI/7*4-0.06, phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
+      { theta: Math.PI/7*4-0.06, phi: Math.PI / 2, targetScene: 'sala7', label: 'Ir para Ofícios do passado' },
     ],
   },
 ];
 
 // Conexões para a planta baixa
-// 1↔2, 2↔3, 3↔5 (vertical), 3↔4 (horizontal). sala6 isolada, sem conexão.
+// 1↔2, 1↔3, 3↔5, 5↔4, 2↔7, 7↔8, 7↔6, 8↔5.
 const floorConnections = [
   ['sala1', 'sala2'],
-  ['sala2', 'sala6'],
   ['sala1', 'sala3'],
   ['sala3', 'sala5'],
   ['sala5', 'sala4'],
-  ['sala5', 'sala6']
+  ['sala2', 'sala7'],
+  ['sala7', 'sala8'],
+  ['sala7', 'sala6'],
+  ['sala8', 'sala5'],
 ];
 
 // ─── Estado ───────────────────────────────────────────────────────────────────
@@ -202,8 +223,10 @@ function drawFloorplan(activeId) {
     sala2: { side: 'left',  align: 'right'  },
     sala3: { side: 'below', align: 'center' },
     sala4: { side: 'right', align: 'left'   },
-    sala5: { side: 'left',  align: 'right'  },
+    sala5: { side: 'above', align: 'center' },
     sala6: { side: 'above', align: 'center' },
+    sala7: { side: 'left',  align: 'right'  },
+    sala8: { side: 'right', align: 'left'   },
   };
 
   scenes.forEach(s => {
