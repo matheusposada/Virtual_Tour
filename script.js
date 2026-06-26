@@ -3,40 +3,44 @@ import * as THREE from 'three';
 
 const scenes = [
   {
-    id: 'sala1', label: 'Política administrativa', image: 'public/assets/sala1museu.png',
-    floorPos: { x: 55, y: 122 },
+    id: 'sala1', label: 'Política administrativa', shortLabel: 'Pol. Admin.',
+    image: 'public/assets/sala1museu.png',
+    floorPos: { x: 75, y: 178 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
       { theta: Math.PI / 1.72,  phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
     ],
   },
   {
-    id: 'sala2', label: 'Ofícios do passado', image: 'public/assets/sala2museu.jpg',
-    floorPos: { x: 55, y: 84 },
+    id: 'sala2', label: 'Ofícios do passado', shortLabel: 'Ofícios',
+    image: 'public/assets/sala2museu.jpg',
+    floorPos: { x: 90, y: 115 },
     hotspots: [
       { theta: Math.PI*1.8,      phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
       { theta: Math.PI/6*4, phi: Math.PI / 2, targetScene: 'sala6', label: 'Ir para Engenho' },
     ],
   },
   {
-    id: 'sala3', label: 'Indígena', image: 'public/assets/indigena.jpg',
-    floorPos: { x: 105, y: 84 },
+    id: 'sala3', label: 'Indígena', shortLabel: 'Indígena',
+    image: 'public/assets/indigena.jpg',
+    floorPos: { x: 110, y: 115 },
     hotspots: [
       { theta: Math.PI/1.3, phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
-      
       { theta: Math.PI*0.98,       phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
     ],
   },
   {
-    id: 'sala4', label: 'Igreja matriz', image: 'public/assets/religiao.jpg',
-    floorPos: { x: 145, y: 84 },
+    id: 'sala4', label: 'Igreja matriz', shortLabel: 'Igreja',
+    image: 'public/assets/religiao.jpg',
+    floorPos: { x: 160, y: 115 },
     hotspots: [
       { theta: Math.PI, phi: Math.PI / 2.3, targetScene: 'sala5', label: 'Ir para Souvenirs' },
     ],
   },
   {
-    id: 'sala5', label: 'Souvenirs', image: 'public/assets/souvenir.jpg',
-    floorPos: { x: 105, y: 55 },
+    id: 'sala5', label: 'Souvenirs', shortLabel: 'Souvenirs',
+    image: 'public/assets/souvenir.jpg',
+    floorPos: { x: 110, y: 60 },
     hotspots: [
       { theta: Math.PI/5.5,       phi: Math.PI / 2.3, targetScene: 'sala4', label: 'Ir para Igreja matriz' },
       { theta: Math.PI/9, phi: Math.PI / 1.7, targetScene: 'sala3', label: 'Ir para Indígena' },
@@ -44,8 +48,9 @@ const scenes = [
     ],
   },
   {
-    id: 'sala6', label: 'Engenho', image: 'public/assets/engenho.jpg',
-    floorPos: { x: 105, y: 22 },
+    id: 'sala6', label: 'Engenho', shortLabel: 'Engenho',
+    image: 'public/assets/engenho.jpg',
+    floorPos: { x: 110, y: 22 },
     hotspots: [
       { theta: Math.PI/7*4-0.06, phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
     ],
@@ -191,16 +196,41 @@ function drawFloorplan(activeId) {
     fCtx.stroke();
   });
 
+  // Configuração manual de posição do label por sala para evitar colisões
+  const labelConfig = {
+    sala1: { side: 'right', align: 'left'   },
+    sala2: { side: 'left',  align: 'right'  },
+    sala3: { side: 'below', align: 'center' },
+    sala4: { side: 'right', align: 'left'   },
+    sala5: { side: 'left',  align: 'right'  },
+    sala6: { side: 'above', align: 'center' },
+  };
+
   scenes.forEach(s => {
     const active = s.id === activeId;
+    const r = active ? 9 : 6;
+    const cfg = labelConfig[s.id] || { side: 'above', align: 'center' };
+    const GAP = 6;
+
     fCtx.beginPath();
-    fCtx.arc(s.floorPos.x, s.floorPos.y, active ? 9 : 6, 0, Math.PI*2);
+    fCtx.arc(s.floorPos.x, s.floorPos.y, r, 0, Math.PI * 2);
     fCtx.fillStyle = active ? '#58aa47' : 'rgba(114, 106, 106, 0.35)';
     fCtx.fill();
+
     fCtx.font = `${active ? 'bold ' : ''}9px "DM Mono", monospace`;
-    fCtx.fillStyle = active ? '#58aa47' : 'rgba(235, 228, 228, 0.45)';
-    fCtx.textAlign = 'center';
-    fCtx.fillText(s.label, s.floorPos.x, s.floorPos.y - 13);
+    fCtx.fillStyle = active ? '#58aa47' : 'rgba(235, 228, 228, 0.6)';
+    fCtx.textAlign = cfg.align;
+
+    const label = s.shortLabel || s.label;
+    let lx = s.floorPos.x;
+    let ly = s.floorPos.y;
+
+    if (cfg.side === 'left')  { lx = s.floorPos.x - r - GAP; fCtx.textBaseline = 'middle'; }
+    if (cfg.side === 'right') { lx = s.floorPos.x + r + GAP; fCtx.textBaseline = 'middle'; }
+    if (cfg.side === 'above') { ly = s.floorPos.y - r - GAP; fCtx.textBaseline = 'bottom'; }
+    if (cfg.side === 'below') { ly = s.floorPos.y + r + GAP; fCtx.textBaseline = 'top'; }
+
+    fCtx.fillText(label, lx, ly);
   });
 
   const pos = scenes.find(s => s.id === activeId)?.floorPos;
