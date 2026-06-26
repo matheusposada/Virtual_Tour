@@ -1,6 +1,6 @@
 # 🏛️ Tour Virtual — Museu da Cidade
 
-Projeto desenvolvido para a disciplina de **Redes de Computadores / Desenvolvimento Frontend** do IFSC.
+Projeto desenvolvido para a disciplina de **Atividades de Extensão** do IFSC.
 O objetivo é oferecer um tour interativo em 360° pelas salas do museu da cidade, permitindo que qualquer pessoa navegue pelo espaço de forma virtual, a partir do navegador, sem instalar nada.
 
 ---
