@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 
-// ─── Cenas ────────────────────────────────────────────────────────────────────
+
 const scenes = [
   {
     id: 'sala1', label: 'Política administrativa', image: 'public/assets/sala1museu.png',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 55, y: 122 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
       {
         theta: 0, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
@@ -20,9 +20,10 @@ const scenes = [
   },
   {
     id: 'sala2', label: 'Ofícios do passado', image: 'public/assets/sala2museu.jpg',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 55, y: 84 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala1', label: 'Ir para Política administrativa' },
+      { theta: Math.PI / 2,  phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
       {
         theta: 0, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
@@ -36,11 +37,13 @@ const scenes = [
   },
   {
     id: 'sala3', label: 'Indígena', image: 'public/assets/indigena.jpg',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 105, y: 84 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      { theta: Math.PI * 1.5, phi: Math.PI / 2, targetScene: 'sala2', label: 'Ir para Ofícios do passado' },
+      { theta: 0,             phi: Math.PI / 2, targetScene: 'sala4', label: 'Ir para Igreja matriz' },
+      { theta: Math.PI / 2,   phi: Math.PI / 2, targetScene: 'sala5', label: 'Ir para Souvenirs' },
       {
-        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        theta: Math.PI, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
         info: {
           title: 'Garagem',
@@ -52,9 +55,9 @@ const scenes = [
   },
   {
     id: 'sala4', label: 'Igreja matriz', image: 'public/assets/religiao.jpg',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 145, y: 84 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      { theta: Math.PI, phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
       {
         theta: 0, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
@@ -68,9 +71,9 @@ const scenes = [
   },
   {
     id: 'sala5', label: 'Souvenirs', image: 'public/assets/souvenir.jpg',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 105, y: 55 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      { theta: Math.PI * 1.5, phi: Math.PI / 2, targetScene: 'sala3', label: 'Ir para Indígena' },
       {
         theta: 0, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
@@ -84,9 +87,9 @@ const scenes = [
   },
   {
     id: 'sala6', label: 'Engenho', image: 'public/assets/engenho.jpg',
-    floorPos: { x: 40, y: 110 },
+    floorPos: { x: 105, y: 22 },
     hotspots: [
-      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      // sala6 é isolada no percurso: sem conexão de volta para outra sala.
       {
         theta: 0, phi: Math.PI / 2.5, type: 'info',
         label: 'Garagem',
@@ -101,9 +104,12 @@ const scenes = [
 ];
 
 // Conexões para a planta baixa
+// 1↔2, 2↔3, 3↔5 (vertical), 3↔4 (horizontal). sala6 isolada, sem conexão.
 const floorConnections = [
-  ['sala','cozinha'],['sala','banheiro'],
-  ['cozinha','quarto'],['quarto','banheiro'],['banheiro','garagem'],
+  ['sala1', 'sala2'],
+  ['sala2', 'sala3'],
+  ['sala3', 'sala5'],
+  ['sala3', 'sala4'],
 ];
 
 // ─── Estado ───────────────────────────────────────────────────────────────────
