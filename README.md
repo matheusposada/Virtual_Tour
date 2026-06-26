@@ -47,29 +47,25 @@ A câmera usa a ordem de rotação `YXZ`, o que simula bem o comportamento de um
 
 ## Instalação e execução
 
-1. **Fork e clone do repositório:**
-   ```bash
-   git clone https://github.com/seu_usuario/Virtual_Tour.git
-   cd Virtual_Tour
-   ```
-
-2. **Instale as dependências:**
-   ```bash
-   npm install
-   ```
-
-3. **Rode o servidor de desenvolvimento:**
-   ```bash
-   npx vite
-   ```
-
-4. Abra o navegador em `http://localhost:5173`.
-
-Para gerar a versão de produção (pasta `dist/`):
+1. Clone o repositório:
 ```bash
-npx vite build
+   git clone https://github.com/Guglevers/Virtual_Tour.git
+   cd Virtual_Tour
 ```
 
+2. Instale as dependências:
+```bash
+   npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+```bash
+   npm run dev
+```
+
+Abra o navegador em `http://localhost:5173`.
+
+> Para fazer fork do projeto e criar sua própria versão, use o botão **Fork** no GitHub antes de clonar.
 ---
 
 ## Estrutura do projeto
