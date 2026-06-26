@@ -3,7 +3,7 @@ import * as THREE from 'three';
 // ─── Cenas ────────────────────────────────────────────────────────────────────
 const scenes = [
   {
-    id: 'quarto3', label: 'Política administrativa', image: 'public/assets/sala1museu.png',
+    id: 'sala1', label: 'Política administrativa', image: 'public/assets/sala1museu.png',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -19,7 +19,7 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto4', label: 'Ofícios do passado', image: 'public/assets/sala2museu.jpg',
+    id: 'sala2', label: 'Ofícios do passado', image: 'public/assets/sala2museu.jpg',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -35,7 +35,7 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto5', label: 'Igreja matriz', image: 'public/assets/religiao.jpg',
+    id: 'sala3', label: 'Indígena', image: 'public/assets/indigena.jpg',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
@@ -51,7 +51,39 @@ const scenes = [
     ],
   },
   {
-    id: 'quarto6', label: 'Souvenirs', image: 'public/assets/souvenir.jpg',
+    id: 'sala4', label: 'Igreja matriz', image: 'public/assets/religiao.jpg',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'sala5', label: 'Souvenirs', image: 'public/assets/souvenir.jpg',
+    floorPos: { x: 40, y: 110 },
+    hotspots: [
+      { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
+      {
+        theta: 0, phi: Math.PI / 2.5, type: 'info',
+        label: 'Garagem',
+        info: {
+          title: 'Garagem',
+          image: 'public/assets/salaifscP.png',
+          text: 'Foto tirada com camera do IFSC.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'sala6', label: 'Engenho', image: 'public/assets/engenho.jpg',
     floorPos: { x: 40, y: 110 },
     hotspots: [
       { theta: Math.PI,      phi: Math.PI / 2, targetScene: 'sala', label: 'Voltar para a Sala' },
